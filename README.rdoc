@@ -1,7 +1,7 @@
 == README
 
 To test the models, their existing relationships and import functionality
-Things you may want to look at:
+hear are things you may want to look at:
 
 * The models folder which holds all the models
 
@@ -22,4 +22,20 @@ How to run the test suite
 * run <tt>rake db:migrate</tt> to create models and their relationships
 
 * then run the command <tt>rspec</tt>
+
+I made the following assumptions and decisions:
+
+* Class Relationships: I assumed that a Restaurant can have multiple Menu objects and that a Menu can have multiple MenuItem objects. To represent these relationships, I used the appropriate association methods provided by ActiveRecord, such as has_many and belongs_to.
+
+* Validations: I decided to add validations to the models to ensure data integrity. Specifically, I added presence validations to ensure that certain attributes are present (e.g., name), uniqueness validations to ensure that certain attributes are unique (e.g., name), and numericality validations to ensure that a MenuItem's price is a positive number.
+
+* Error Handling: I added exception handling to the import_restaurant_data method to handle potential errors during the creation of restaurant data. For example, if a validation error occurs while creating a MenuItem, an ActiveRecord::RecordInvalid exception is caught, and an error message is logged.
+
+* JSON Parsing: I assumed that the input data for the import_restaurant_data method would be a JSON string containing an array of restaurant objects. Each restaurant object should have a name attribute and an array of menus, where each menu has a name attribute and an array of menu_items (or dishes). I parsed this JSON data using JSON.parse and accessed the relevant attributes to create the corresponding database records.
+
+* Data Duplication: To handle scenarios where duplicate records (e.g., menu items with the same name) already exist in the database, I used the find_or_create_by and find_or_initialize_by methods provided by ActiveRecord. These methods ensure that existing records are found if they match certain attributes or are created if they don't exist.
+
+* Logging and Return Values: I added logging statements to track the progress and outcome of the data import process. The method import_restaurant_data returns an array of logs and a success flag to indicate whether the import was successful or not.
+
+* These assumptions and decisions were made based on typical conventions and best practices when working with ActiveRecord models and the specific requirements or business logic.
 
